@@ -1,6 +1,6 @@
 # Provided, don't edit
 require 'directors_database'
-
+require 'pry'
 # A method we're giving you. This "flattens"  Arrays of Arrays so: [[1,2],
 # [3,4,5], [6]] => [1,2,3,4,5,6].
 
@@ -21,7 +21,7 @@ def flatten_a_o_a(aoa)
 end
 
 def movie_with_director_name(director_name, movie_data)
-  { 
+  {
     :title => movie_data[:title],
     :worldwide_gross => movie_data[:worldwide_gross],
     :release_year => movie_data[:release_year],
@@ -31,14 +31,28 @@ def movie_with_director_name(director_name, movie_data)
 end
 
 
+
 # Your code after this point
 
 def movies_with_director_key(name, movies_collection)
+
+
+array = []
   # GOAL: For each Hash in an Array (movies_collection), provide a collection
   # of movies and a directors name to the movie_with_director_name method
   # and accumulate the returned Array of movies into a new Array that's
   # returned by this method.
   #
+  i = 0
+  while i < movies_collection.length do
+  data = movie_with_director_name(name, movies_collection[i])
+  array.push(data)
+    i += 1
+  end
+  array
+#  pp array
+
+
   # INPUT:
   # * name: A director's name
   # * movies_collection: An Array of Hashes where each Hash represents a movie
@@ -59,6 +73,19 @@ def gross_per_studio(collection)
   # INPUT:
   # * collection: Array of Hashes where each Hash where each Hash represents a movie
   #
+  index = 0
+  hash = {}
+  while index < collection.length do
+    studio_name = collection[index][:studio]
+    studio_gross = collection[index][:worldwide_gross]
+    if hash[studio_name]
+      hash[studio_name] += studio_gross
+    else
+      hash[studio_name] = studio_gross
+    end
+    index += 1
+  end
+    hash
   # RETURN:
   #
   # Hash whose keys are the studio names and whose values are the sum
@@ -68,10 +95,23 @@ end
 def movies_with_directors_set(source)
   # GOAL: For each director, find their :movies Array and stick it in a new Array
   #
+
   # INPUT:
   # * source: An Array of Hashes containing director information including
   # :name and :movies
   #
+#pp outer_array
+  index = 0
+  array = []
+  while index < source.length do
+    director = source[index][:name]
+    movies = source[index][:movies]
+    array.push(movies_with_director_key(director, movies))
+    index += 1
+  end
+array
+
+
   # RETURN:
   #
   # Array of Arrays containing all of a director's movies. Each movie will need
